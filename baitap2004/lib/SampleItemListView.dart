@@ -1,8 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:baitap2004/SampleItem.dart';
 import 'package:baitap2004/SampleItemDetailsView.dart';
 import 'package:baitap2004/SampleItemUpdate.dart';
 import 'package:baitap2004/SampleItemViewModel.dart';
-import 'package:baitap2004/SampleItemWidget.dart';
-import 'package:flutter/material.dart';
 
 class SampleItemListView extends StatefulWidget {
   const SampleItemListView({Key? key}) : super(key: key);
@@ -18,17 +18,20 @@ class _SampleItemListViewState extends State<SampleItemListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sample Items'),
+        title: const Text('Quản Lý Phân Nhóm'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              showModalBottomSheet<String?>(
+              showModalBottomSheet<Map<String, String>>(
                 context: context,
                 builder: (context) => const SampleItemUpdate(),
               ).then((value) {
                 if (value != null) {
-                  viewModel.addItem(value);
+                  viewModel.addItem(
+                    groupName: value['groupName'] ?? '',
+                    memberName: value['memberName'] ?? '',
+                  );
                 }
               });
             },
@@ -42,9 +45,15 @@ class _SampleItemListViewState extends State<SampleItemListView> {
             itemCount: viewModel.items.length,
             itemBuilder: (context, index) {
               final item = viewModel.items[index];
-              return SampleItemWidget(
-                key: ValueKey(item.id),
-                item: viewModel.items[index],
+              return ListTile(
+                title: Text(item.name.value),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Tên Nhóm: ${item.groupName}'),
+                    Text('Tên Thành Viên: ${item.memberName}'),
+                  ],
+                ),
                 onTap: () {
                   Navigator.of(context)
                       .push<bool>(

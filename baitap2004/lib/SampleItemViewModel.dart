@@ -1,5 +1,5 @@
-import 'package:baitap2004/SampleItem.dart';
 import 'package:flutter/material.dart';
+import 'SampleItem.dart';
 
 class SampleItemViewModel extends ChangeNotifier {
   static final _instance = SampleItemViewModel._();
@@ -7,8 +7,11 @@ class SampleItemViewModel extends ChangeNotifier {
   SampleItemViewModel._();
   final List<SampleItem> items = [];
 
-  void addItem(String name) {
-    items.add(SampleItem(name: name));
+  void addItem({
+    required String groupName,
+    required String memberName,
+  }) {
+    items.add(SampleItem(groupName: groupName, memberName: memberName));
     notifyListeners();
   }
 
@@ -17,12 +20,14 @@ class SampleItemViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateItem(String id, String newName) {
+  void updateItem(String id, String newGroupName, String newMemberName) {
     try {
       final item = items.firstWhere((item) => item.id == id);
-      item.name.value = newName;
+      item.groupName = newGroupName;
+      item.memberName = newMemberName;
     } catch (e) {
       debugPrint("Không tìm thấy mục với ID $id");
     }
+    notifyListeners();
   }
 }

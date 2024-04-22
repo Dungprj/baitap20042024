@@ -3,25 +3,38 @@ import 'SampleItemViewModel.dart';
 
 class SampleItemUpdate extends StatefulWidget {
   final String? initialName;
+  final String? initialGroupName;
+  final String? initialMemberName;
 
-  const SampleItemUpdate({Key? key, this.initialName}) : super(key: key);
+  const SampleItemUpdate({
+    Key? key,
+    this.initialName,
+    this.initialGroupName,
+    this.initialMemberName,
+  }) : super(key: key);
 
   @override
   _SampleItemUpdateState createState() => _SampleItemUpdateState();
 }
 
 class _SampleItemUpdateState extends State<SampleItemUpdate> {
-  late TextEditingController textEditingController;
+  late TextEditingController groupTextEditingController;
+  late TextEditingController memberTextEditingController;
 
   @override
   void initState() {
     super.initState();
-    textEditingController = TextEditingController(text: widget.initialName);
+
+    groupTextEditingController =
+        TextEditingController(text: widget.initialGroupName);
+    memberTextEditingController =
+        TextEditingController(text: widget.initialMemberName);
   }
 
   @override
   void dispose() {
-    textEditingController.dispose();
+    groupTextEditingController.dispose();
+    memberTextEditingController.dispose();
     super.dispose();
   }
 
@@ -33,14 +46,26 @@ class _SampleItemUpdateState extends State<SampleItemUpdate> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pop(textEditingController.text);
+              Navigator.of(context).pop({
+                'groupName': groupTextEditingController.text,
+                'memberName': memberTextEditingController.text,
+              });
             },
             icon: const Icon(Icons.save),
           ),
         ],
       ),
-      body: TextFormField(
-        controller: textEditingController,
+      body: Column(
+        children: [
+          TextFormField(
+            controller: groupTextEditingController,
+            decoration: InputDecoration(labelText: 'Tên nhóm'),
+          ),
+          TextFormField(
+            controller: memberTextEditingController,
+            decoration: InputDecoration(labelText: 'Tên thành viên'),
+          ),
+        ],
       ),
     );
   }
