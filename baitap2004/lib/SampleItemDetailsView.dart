@@ -19,7 +19,7 @@ class _SampleItemDetailsViewState extends State<SampleItemDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Item Details'),
+        title: const Text('Chi Tiết'),
         actions: [
           IconButton(
             onPressed: () {
@@ -30,23 +30,28 @@ class _SampleItemDetailsViewState extends State<SampleItemDetailsView> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              _confirmDeleteItem();
+              _confirmDeleteItem(context);
             },
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8),
-            Text('Tên Nhóm: ${widget.item.groupName}',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 8),
-            Text('Tên Thành Viên: ${widget.item.memberName}',
-                style: TextStyle(fontSize: 16)),
-          ],
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 8),
+              Text('Tên Người Đánh : ${widget.item.tenNguoiDanh}',
+                  style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              Text('Số Đánh : ${widget.item.soDe}',
+                  style: TextStyle(fontSize: 16)),
+              SizedBox(height: 8),
+              Text('Số Tiền: ${widget.item.soTien}',
+                  style: TextStyle(fontSize: 16)),
+            ],
+          ),
         ),
       ),
     );
@@ -56,23 +61,24 @@ class _SampleItemDetailsViewState extends State<SampleItemDetailsView> {
     final updatedValues = await Navigator.of(context).push<Map<String, String>>(
       MaterialPageRoute(
         builder: (context) => SampleItemUpdate(
-          initialName: widget.item.name.value,
-          initialGroupName: widget.item.groupName,
-          initialMemberName: widget.item.memberName,
+          initialSoDe: widget.item.soDe,
+          initialSoTien: widget.item.soTien,
+          initialTenNguoiDanh: widget.item.tenNguoiDanh,
         ),
       ),
     );
     if (updatedValues != null) {
       setState(() {
-        widget.item.groupName =
-            updatedValues['groupName'] ?? widget.item.groupName;
-        widget.item.memberName =
-            updatedValues['memberName'] ?? widget.item.memberName;
+        widget.item.soDe = updatedValues['soDe'].toString() ?? widget.item.soDe;
+        widget.item.soTien =
+            updatedValues['soTien'].toString() ?? widget.item.soTien;
+        widget.item.tenNguoiDanh = updatedValues['tenNguoiDanh'].toString() ??
+            widget.item.tenNguoiDanh;
       });
     }
   }
 
-  void _confirmDeleteItem() {
+  void _confirmDeleteItem(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -89,7 +95,7 @@ class _SampleItemDetailsViewState extends State<SampleItemDetailsView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Đóng dialog và tiếp tục xóa
-                viewModel.removeItem(widget.item.id); // Xóa item
+                viewModel.removeItem(widget.item.id, context); // Xóa item
                 Navigator.of(context)
                     .pop(true); // Quay lại màn hình trước đó (nếu cần)
               },

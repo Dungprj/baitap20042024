@@ -2,39 +2,43 @@ import 'package:flutter/material.dart';
 import 'SampleItemViewModel.dart';
 
 class SampleItemUpdate extends StatefulWidget {
-  final String? initialName;
-  final String? initialGroupName;
-  final String? initialMemberName;
+  final String? initialSoDe;
+  final String? initialTenNguoiDanh;
+  final String? initialSoTien;
 
-  const SampleItemUpdate({
-    Key? key,
-    this.initialName,
-    this.initialGroupName,
-    this.initialMemberName,
-  }) : super(key: key);
+  SampleItemUpdate(
+      {Key? key,
+      this.initialTenNguoiDanh,
+      this.initialSoDe,
+      this.initialSoTien})
+      : super(key: key);
 
   @override
   _SampleItemUpdateState createState() => _SampleItemUpdateState();
 }
 
 class _SampleItemUpdateState extends State<SampleItemUpdate> {
-  late TextEditingController groupTextEditingController;
-  late TextEditingController memberTextEditingController;
+  late TextEditingController soDeTextEditingController;
+  late TextEditingController soTienTextEditingController;
+  late TextEditingController tenNguoiDanhTextEditingController;
 
   @override
   void initState() {
     super.initState();
 
-    groupTextEditingController =
-        TextEditingController(text: widget.initialGroupName);
-    memberTextEditingController =
-        TextEditingController(text: widget.initialMemberName);
+    soDeTextEditingController = TextEditingController(text: widget.initialSoDe);
+    soTienTextEditingController =
+        TextEditingController(text: widget.initialSoTien);
+    tenNguoiDanhTextEditingController =
+        TextEditingController(text: widget.initialTenNguoiDanh);
   }
 
   @override
   void dispose() {
-    groupTextEditingController.dispose();
-    memberTextEditingController.dispose();
+    soDeTextEditingController.dispose();
+    soTienTextEditingController.dispose();
+    tenNguoiDanhTextEditingController.dispose();
+
     super.dispose();
   }
 
@@ -42,13 +46,14 @@ class _SampleItemUpdateState extends State<SampleItemUpdate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.initialName != null ? 'Chỉnh sửa' : 'Thêm mới'),
+        title: Text(widget.initialSoDe != null ? 'Chỉnh sửa' : 'Thêm mới'),
         actions: [
           IconButton(
             onPressed: () {
               Navigator.of(context).pop({
-                'groupName': groupTextEditingController.text,
-                'memberName': memberTextEditingController.text,
+                'soDe': soDeTextEditingController.text,
+                'soTien': soTienTextEditingController.text,
+                'tenNguoiDanh': tenNguoiDanhTextEditingController.text,
               });
             },
             icon: const Icon(Icons.save),
@@ -58,12 +63,16 @@ class _SampleItemUpdateState extends State<SampleItemUpdate> {
       body: Column(
         children: [
           TextFormField(
-            controller: groupTextEditingController,
-            decoration: InputDecoration(labelText: 'Tên nhóm'),
+            controller: tenNguoiDanhTextEditingController,
+            decoration: InputDecoration(labelText: 'Tên'),
           ),
           TextFormField(
-            controller: memberTextEditingController,
-            decoration: InputDecoration(labelText: 'Tên thành viên'),
+            controller: soDeTextEditingController,
+            decoration: InputDecoration(labelText: 'Số đề'),
+          ),
+          TextFormField(
+            controller: soTienTextEditingController,
+            decoration: InputDecoration(labelText: 'Số Tiền'),
           ),
         ],
       ),
